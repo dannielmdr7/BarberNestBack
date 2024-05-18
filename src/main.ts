@@ -14,6 +14,5 @@ async function bootstrap() {
   );
 
   await app.listen(envs.port);
-  console.log(`Server running on http://localhost:${envs.port}`);
 }
 bootstrap();

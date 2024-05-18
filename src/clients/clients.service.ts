@@ -1,34 +1,40 @@
 import { Injectable } from '@nestjs/common';
-import { CreateClientDto } from './dto/create-client.dto';
-import { UpdateClientDto } from './dto/update-client.dto';
-import { Model } from 'mongoose';
-import { Client } from './entities/client.entity';
 import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { CreateClientDto } from './dto/create-client.dto';
+import { GetScheduleDto } from './dto/get-schedule';
+import { Client } from './entities/client.entity';
 
 @Injectable()
 export class ClientsService {
   constructor(
     @InjectModel(Client.name)
     private readonly clientsModel: Model<Client>,
-  ) { }
+  ) {}
   async create(createClientDto: CreateClientDto) {
     const client = await this.clientsModel.create(createClientDto);
     return client;
   }
 
-  findAll() {
-    return `This action returns all clients`;
+  async findAll(getScheduleDto: GetScheduleDto) {
+    const schedule = await this.clientsModel.find({
+      barberId: getScheduleDto.barberId,
+      isDeleted: false,
+      startDate: {
+        $gte: getScheduleDto.startDate,
+        $lte: getScheduleDto.endDate,
+      },
+    });
+
+    return schedule;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} client`;
-  }
-
-  update(id: number, updateClientDto: UpdateClientDto) {
-    return `This action updates a #${id} client`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} client`;
+  async update(id: string) {
+    const updatedInfo = await this.clientsModel.findByIdAndUpdate(
+      id,
+      { isDeleted: true },
+      { new: true },
+    );
+    return updatedInfo;
   }
 }

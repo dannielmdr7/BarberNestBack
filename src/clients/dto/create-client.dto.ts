@@ -1,4 +1,4 @@
-import { IsNumber, IsString, Min, MinLength } from 'class-validator';
+import { IsMongoId, IsNumber, IsString, Min, MinLength } from 'class-validator';
 
 export class CreateClientDto {
   @IsString()
@@ -6,8 +6,8 @@ export class CreateClientDto {
   clientName: string;
 
   @IsString()
-  @MinLength(4)
-  barberName: string;
+  @IsMongoId()
+  barberId: string;
 
   @IsNumber()
   @Min(10000)

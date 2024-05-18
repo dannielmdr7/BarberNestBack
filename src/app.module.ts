@@ -1,16 +1,16 @@
-import { Module } from '@nestjs/common';
+import { envs } from './config/envs';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { envs } from './config/envs';
-import { NameTestModule } from './name-test/name-test.module';
+import { BarbersModule } from './barbers/barbers.module';
 import { ClientsModule } from './clients/clients.module';
 
 @Module({
   imports: [
     MongooseModule.forRoot(envs.databaseUrl),
-    NameTestModule,
     ClientsModule,
+    BarbersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

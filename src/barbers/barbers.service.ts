@@ -20,16 +20,4 @@ export class BarbersService {
     const barbers = await this.barberModel.find();
     return barbers;
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} barber`;
-  }
-
-  update(id: number, updateBarberDto: UpdateBarberDto) {
-    return `This action updates a #${id} barber`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} barber`;
-  }
 }

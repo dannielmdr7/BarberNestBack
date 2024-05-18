@@ -8,11 +8,13 @@ import { ClientsModule } from './clients/clients.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(envs.databaseUrl),
+    MongooseModule.forRoot(envs.databaseUrl, {
+      dbName: 'barbershop',
+    }),
     ClientsModule,
     BarbersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

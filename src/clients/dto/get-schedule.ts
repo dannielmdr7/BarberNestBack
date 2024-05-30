@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import { IsMongoId, IsNumber, Min } from 'class-validator';
 
 export class GetScheduleDto {
@@ -6,9 +7,11 @@ export class GetScheduleDto {
 
   @IsNumber()
   @Min(10000)
+  @Transform(({ value }) => Number(value))
   startDate: number;
 
   @IsNumber()
   @Min(10000)
+  @Transform(({ value }) => Number(value))
   endDate: number;
 }

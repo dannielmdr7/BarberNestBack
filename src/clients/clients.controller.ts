@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ClientsService } from './clients.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { GetScheduleDto } from './dto/get-schedule';
@@ -13,8 +21,13 @@ export class ClientsController {
   }
 
   @Get()
-  findAll(@Body() getScheduleDto: GetScheduleDto) {
+  findAll(@Query() getScheduleDto: GetScheduleDto) {
     return this.clientsService.findAll(getScheduleDto);
+  }
+
+  @Get('/schedule')
+  getSchedule(@Query() getScheduleDto: GetScheduleDto) {
+    return this.clientsService.getSchedule(getScheduleDto);
   }
 
   @Patch(':id')

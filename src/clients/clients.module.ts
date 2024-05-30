@@ -3,6 +3,7 @@ import { ClientsService } from './clients.service';
 import { ClientsController } from './clients.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Client, ClientSchema } from './entities/client.entity';
+import { Barber, BarberSchema } from 'src/barbers/entities/barber.entity';
 
 @Module({
   controllers: [ClientsController],
@@ -12,6 +13,10 @@ import { Client, ClientSchema } from './entities/client.entity';
       {
         name: Client.name,
         schema: ClientSchema,
+      },
+      {
+        name: Barber.name,
+        schema: BarberSchema,
       },
     ]),
   ],

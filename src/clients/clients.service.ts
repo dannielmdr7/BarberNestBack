@@ -9,7 +9,7 @@ import { unixToDate } from 'src/utils/dates';
 
 @Injectable()
 export class ClientsService {
-  private scheduleTimes = Array.from({ length: 13 }, (_, i) => i + 8);
+  private scheduleTimes = Array.from({ length: 11 }, (_, i) => i + 10);
   constructor(
     @InjectModel(Client.name)
     private readonly clientsModel: Model<Client>,
@@ -18,29 +18,24 @@ export class ClientsService {
   ) { }
   async create(createClientDto: CreateClientDto) {
     const barber = await this.barberModel.findById(createClientDto.barberId);
-    console.log({ barber });
     if (!barber) {
       throw new NotFoundException('Barber not found');
     }
-    const overlap = await this.clientsModel.find({
-      barberId: createClientDto.barberId,
-      $or: [
-        { startDate: createClientDto.startDate },
-        { endDate: createClientDto.endDate },
-        {
-          startDate: { $lt: createClientDto.startDate },
-          endDate: { $gt: createClientDto.startDate },
-        },
-        {
-          startDate: { $lt: createClientDto.endDate },
-          endDate: { $gt: createClientDto.endDate },
-        },
-      ],
-      isDeleted: false,
-    });
-    if (overlap.length) {
-      throw new NotFoundException('Schedule already exists');
-    }
+    // const overlap = await this.clientsModel.find({
+    //   barberId: createClientDto.barberId,
+    //   $or: [
+    //     { startDate: createClientDto.startDate },
+    //     { endDate: createClientDto.endDate },
+    //     {
+    //       startDate: { $lt: createClientDto.endDate },
+    //       endDate: { $gt: createClientDto.startDate },
+    //     },
+    //   ],
+    //   isDeleted: false,
+    // });
+    // if (overlap.length) {
+    //   throw new NotFoundException('Schedule already exists');
+    // }
 
     const client = await this.clientsModel.create(createClientDto);
     return client;
@@ -55,7 +50,6 @@ export class ClientsService {
         $lte: getScheduleDto.endDate,
       },
     });
-
     return schedule;
   }
   async getSchedule(getScheduleDto: GetScheduleDto) {

@@ -5,7 +5,8 @@ import { CreateClientDto } from './dto/create-client.dto';
 import { GetScheduleDto } from './dto/get-schedule';
 import { Client } from './entities/client.entity';
 import { Barber } from 'src/barbers/entities/barber.entity';
-import { unixToDate } from 'src/utils/dates';
+
+import * as moment from 'moment-timezone';
 
 @Injectable()
 export class ClientsService {
@@ -54,11 +55,16 @@ export class ClientsService {
   }
   async getSchedule(getScheduleDto: GetScheduleDto) {
     const schedules = await this.findAll(getScheduleDto);
-    const times = schedules.map((schedule) =>
-      unixToDate(+schedule.startDate).getHours(),
-    );
+
+    const times = schedules.map((schedule) => +schedule.startDate);
+    const hours = times.map((time) => {
+      const hour = moment(time * 1000)
+        .tz('America/Bogota')
+        .hour();
+      return hour;
+    });
     const avaibleTimes = this.scheduleTimes.filter(
-      (time) => !times.includes(time),
+      (time) => !hours.includes(time),
     );
     return avaibleTimes;
   }

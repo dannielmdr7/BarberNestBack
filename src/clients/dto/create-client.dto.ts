@@ -6,6 +6,13 @@ export class CreateClientDto {
   clientName: string;
 
   @IsString()
+  @MinLength(4)
+  turnDate: string;
+
+  @IsNumber()
+  startHour: number;
+
+  @IsString()
   @IsMongoId()
   barberId: string;
 

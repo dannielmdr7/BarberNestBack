@@ -1,4 +1,11 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateClientDto } from './create-client.dto';
+import { IsMongoId, IsString, MinLength } from 'class-validator';
 
-export class UpdateClientDto extends PartialType(CreateClientDto) {}
+export class UpdateClientDto {
+  @IsString()
+  @MinLength(4)
+  masterKey: string;
+
+  @IsString()
+  @IsMongoId()
+  clientId: string;
+}

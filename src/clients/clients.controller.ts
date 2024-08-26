@@ -10,6 +10,7 @@ import {
 import { ClientsService } from './clients.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { GetScheduleDto } from './dto/get-schedule';
+import { UpdateClientDto } from './dto/update-client.dto';
 
 @Controller('clients')
 export class ClientsController {
@@ -30,8 +31,8 @@ export class ClientsController {
     return this.clientsService.getSchedule(getScheduleDto);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string) {
-    return this.clientsService.update(id);
+  @Patch()
+  update(@Body() deleteUser: UpdateClientDto) {
+    return this.clientsService.update(deleteUser);
   }
 }

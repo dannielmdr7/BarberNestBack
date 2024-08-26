@@ -11,6 +11,7 @@ import { Client } from './entities/client.entity';
 import { Barber } from 'src/barbers/entities/barber.entity';
 
 import * as moment from 'moment-timezone';
+import { UpdateClientDto } from './dto/update-client.dto';
 
 @Injectable()
 export class ClientsService {
@@ -20,7 +21,7 @@ export class ClientsService {
     private readonly clientsModel: Model<Client>,
     @InjectModel(Barber.name)
     private readonly barberModel: Model<Barber>,
-  ) { }
+  ) {}
   async create(createClientDto: CreateClientDto) {
     const barber = await this.barberModel.findById(createClientDto.barberId);
     if (!barber) {
@@ -59,6 +60,7 @@ export class ClientsService {
     const unAvaibleTurn = await this.clientsModel.findOne({
       startDate: unixStartDate,
       endDate: unixEndDate,
+      isDeleted: false,
     });
     if (unAvaibleTurn) {
       throw new BadRequestException('Schedule already exists');
@@ -99,12 +101,15 @@ export class ClientsService {
     return avaibleTimes;
   }
 
-  async update(id: string) {
-    const updatedInfo = await this.clientsModel.findByIdAndUpdate(
-      id,
-      { isDeleted: true },
-      { new: true },
-    );
-    return updatedInfo;
+  async update(deleteUser: UpdateClientDto) {
+    if (deleteUser.masterKey === 'CarlosBarberShopAdmin') {
+      const updatedInfo = await this.clientsModel.findByIdAndUpdate(
+        deleteUser.clientId,
+        { isDeleted: true },
+        { new: true },
+      );
+      return updatedInfo;
+    }
+    throw new BadRequestException('Clave incorrecta');
   }
 }

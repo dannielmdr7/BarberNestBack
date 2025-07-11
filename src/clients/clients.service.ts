@@ -102,7 +102,7 @@ export class ClientsService {
   }
 
   async update(deleteUser: UpdateClientDto) {
-    if (deleteUser.masterKey === 'CarlosBarberShopAdmin') {
+    if (deleteUser.masterKey === 'Eduarcps') {
       const updatedInfo = await this.clientsModel.findByIdAndUpdate(
         deleteUser.clientId,
         { isDeleted: true },
